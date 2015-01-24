@@ -29,7 +29,7 @@ CAP.allowance = {
 -- Groups whom are allowed to use gcap.
  
 CAP.command = "!cap"
--- The command a player with the previligies would type in chat to use gcap.
+-- The command a player with the privileges would type in chat to use gcap.
 -- Arguments go like; !cap <player> <quality> (quality is not needed)
  
 CAP.defaultquality = 70

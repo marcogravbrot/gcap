@@ -41,7 +41,7 @@ hook.Add("PlayerSay", "CAP.PlayerCommand", function(ply, text, public)
 			end
 		else
             net.Start("gcapNotify")
-            net.WriteTable({"You do not have the previliges to use ", Color(125, 200, 125), "gcap", color_white, "!"})
+            net.WriteTable({"You do not have the privileges to use ", Color(125, 200, 125), "gcap", color_white, "!"})
             net.Send(ply)
 		end
 		return false
