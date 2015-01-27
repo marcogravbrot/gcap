@@ -179,7 +179,8 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
             end
         end)
 
-        local htmlpnl
+        local htmlpnl = frm:Add( "HTML" )
+        htmlpnl:Dock( FILL )
 
         net.Receive("addPicture", function(len, server)
             ply = LocalPlayer()
@@ -195,10 +196,7 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
                 htmlpnl:SetHTML( '<style type="text/css"> body { margin: 0; padding: 0; overflow: hidden; } img { width: 100%; height: 100%; } </style> <img src="data:image/jpg;base64,' .. data .. '"> ')
                 ply.ScreenViewChunks = {}
             end
-        end)       
-
-        htmlpnl = frm:Add( "HTML" )
-        htmlpnl:Dock( FILL )
+        end)
     end
 end)
 
