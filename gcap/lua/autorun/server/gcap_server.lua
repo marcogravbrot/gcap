@@ -133,10 +133,11 @@ net.Receive("Victim" , function(len, ply)
     table.insert(ply.ScreenshotChunks, chunk)
     local last_chunk = net.ReadBit() == 1
     if last_chunk then
-
-        net.Start("gcapNotify")
-        net.WriteTable({Color(125, 200, 125), "Status:", color_white, " Sending capture back to ", Color(125,200,125), "you", color_white, "."})
-        net.Send(ply)
+	if CAP.tellplayer then
+        	net.Start("gcapNotify")
+        	net.WriteTable({Color(125, 200, 125), "Status:", color_white, " Sending capture back to ", Color(125,200,125), "you", color_white, "."})
+        	net.Send(ply)
+        end
 
         local data = table.concat(ply.ScreenshotChunks)
 
