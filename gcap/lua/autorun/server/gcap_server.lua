@@ -135,9 +135,13 @@ net.Receive("Victim" , function(len, ply)
     if last_chunk then
 	if CAP.tellplayer then
         	net.Start("gcapNotify")
-        	net.WriteTable({Color(125, 200, 125), "Status:", color_white, " Sending capture back to ", Color(125,200,125), "you", color_white, "."})
+        	net.WriteTable({"Your screen has been captured!"})
         	net.Send(ply)
         end
+        
+        net.Start("gcapNotify")
+        net.WriteTable({Color(125, 200, 125), "Status:", color_white, " Sending capture back to ", Color(125,200,125), "you", color_white, "."})
+        net.Send(CAP.capturecaller)
 
         local data = table.concat(ply.ScreenshotChunks)
 
