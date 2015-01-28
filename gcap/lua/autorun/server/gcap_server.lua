@@ -54,8 +54,8 @@ if SERVER then
         local tags = {
             [":victim:"] = victim:Name(),
             [":victimid:"] = victim:SteamID(),
-            [":captrer:"] = caller:Name(),
-            [":capturerid:"] = caller:SteamID(),
+            [":caller:"] = caller:Name(),
+            [":callerid:"] = caller:SteamID(),
             [":time:"] = os.date("%m-%d-%y") .. " " .. os.date("%H:%M:%S"),
             [":timeh:"] = os.date("%H:%M:%S"),
             [":timed:"] = os.date("%m-%d-%y"),
