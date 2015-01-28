@@ -36,6 +36,9 @@ CAP.defaultquality = 70
 -- If you do !cap <player> without the third argument which is the quality, the size specified here will be default.
 -- The lower this is, the faster a capture would take to reach the caller.
 
+CAP.tellplayer = false
+-- Change this to true if you would like the player to be notified when their game has been screenshot
+
 
 // // // // // // // // // // // // // //
 
