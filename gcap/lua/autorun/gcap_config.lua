@@ -80,8 +80,9 @@ CAP.saveformat = ":timeh: (:victimid:)"
 
 -- :victim: The victim's name.
 -- :victimid: The victim's SteamID.
--- :caller: The caller's name.
--- :callerid: The caller's steamid.
+-- :captrer: The caller's name.
+-- :capturerid: The caller's steamid.
 -- :time: Full time, for example 1/1/2015 20:15:06
 -- :timed: The date, for example 1/1/2015
 -- :timeh: The time of the capture. For example, 20:15:06
+
