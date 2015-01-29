@@ -1,12 +1,12 @@
-/*         
-[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]                                           
-   __     ___     __     _____   
- /'_ `\  /'___\ /'__`\  /\ '__`\ 
+/*
+[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]
+   __     ___     __     _____
+ /'_ `\  /'___\ /'__`\  /\ '__`\
 /\ \L\ \/\ \__//\ \L\.\_\ \ \L\ \
 \ \____ \ \____\ \__/.\_\\ \ ,__/
- \/___L\ \/____/\/__/\/_/ \ \ \/ 
-   /\____/                 \ \_\ 
-   \_/__/                   \/_/ 
+ \/___L\ \/____/\/__/\/_/ \ \ \/
+   /\____/                 \ \_\
+   \_/__/                   \/_/
 
    --[[
 		By Author.
@@ -22,16 +22,16 @@ CAP = CAP or {}
 --[=[ Basic Configuration ]=]--
 
 // // // // // // // // // // //
- 
+
 CAP.allowance = {
     ["superadmin"] = true,
 }
 -- Groups whom are allowed to use gcap.
- 
+
 CAP.command = "!cap"
 -- The command a player with the privileges would type in chat to use gcap.
 -- Arguments go like; !cap <player> <quality> (quality is not needed)
- 
+
 CAP.defaultquality = 70
 -- If you do !cap <player> without the third argument which is the quality, the size specified here will be default.
 -- The lower this is, the faster a capture would take to reach the caller.
