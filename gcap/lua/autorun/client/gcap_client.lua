@@ -79,6 +79,23 @@ net.Receive("gcap_Caller", function(len, server)
     end
 end)
 
+function CAP.Notify( tbl )
+    local msg = {}
+
+    table.insert(msg, color_white)
+    table.insert(msg, "[")
+    table.insert(msg, Color(0,125,0))
+    table.insert(msg, "gcap")
+    table.insert(msg, color_white)
+    table.insert(msg, "] ")
+
+    for k,v in pairs( tbl ) do
+        table.insert(msg, v)
+    end
+
+    chat.AddText( unpack( msg ) )
+end)
+
 concommand.Add("cap_viewer", function(ply, cmd, args)
     if IsValid(ply) and (CAP.allowance[ply:GetUserGroup()]) then
         local frm = vgui.Create("DFrame")
@@ -191,6 +208,7 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
             table.insert(ply.ScreenViewChunks, chunk)
             local last_chunk = net.ReadBit() == 1
             if last_chunk then
+                if (not (htmlpnl and ispanel(htmlpnl))) then CAP.Notify({"You do not have the view menu open! Please try again"}) return end
                 local data = table.concat(ply.ScreenViewChunks)
                 data = util.Base64Encode(data)
                 htmlpnl:SetHTML( '<style type="text/css"> body { margin: 0; padding: 0; overflow: hidden; } img { width: 100%; height: 100%; } </style> <img src="data:image/jpg;base64,' .. data .. '"> ')
