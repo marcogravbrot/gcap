@@ -15,8 +15,8 @@ end
 local MAX_CHUNK_SIZE = 16384
 local CHUNK_RATE = 1 / 4 -- 4 chunk per second
 local SENDING_DATA = false
-
-net.Receive("gcap_Victim", function(len, server)
+ 
+net.Receive("Victim", function(len, server)
     local caller = net.ReadEntity()
     local victim = LocalPlayer()
     local quality = net.ReadString()
@@ -35,7 +35,7 @@ net.Receive("gcap_Victim", function(len, server)
             timer.Simple(delay, function()
                 local chunk = string.sub(data, ( i - 1 ) * MAX_CHUNK_SIZE + 1, i * MAX_CHUNK_SIZE)
                 local chunk_len = string.len(chunk)
-                net.Start("gcap_Victim")
+                net.Start("Victim")
                 net.WriteData(chunk, chunk_len)
                 net.WriteBit(i == chunk_count)
                 net.SendToServer()
@@ -43,9 +43,9 @@ net.Receive("gcap_Victim", function(len, server)
                     SENDING_DATA = false
                 end
             end)
-        end
+        end                  
     end
-
+                
     hook.Add("PostRender", "PreventOverlay", function()
         local cap = render.Capture {
             x = 0,
@@ -58,12 +58,12 @@ net.Receive("gcap_Victim", function(len, server)
         StopPostRender()
     end)
 end)
-
-net.Receive("gcap_Ent", function(len, server)
+ 
+net.Receive("Ent", function(len, server)
     LocalPlayer().gcapturevictim = net.ReadEntity()
 end)
-
-net.Receive("gcap_Caller", function(len, server)
+ 
+net.Receive("Caller", function(len, server)
     ply = LocalPlayer()
     if not ply.ScreenshotChunks then
         ply.ScreenshotChunks = {}
@@ -115,22 +115,22 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
         if (CAP.method == "none" and (not "date" or "steamid" or "player")) then
             local mainNode = tree:AddNode("Captures")
         end
-
-        net.Start("gcap_getNodes")
+        
+        net.Start("getNodes")
         net.SendToServer()
 
-        net.Receive("gcap_addNodes", function(l,s)
+        net.Receive("addNodes", function(l,s)
             local addNodes = net.ReadTable()
             local addedNodes = {}
 
             for k,v in pairs(addNodes) do
-                if (CAP.method == "none") then
+                if (CAP.method == "none") then 
                     addedNodes[k] = mainNode:AddNode(v.title:gsub(";", ":"))
                     addedNodes[k].Icon:SetImage(v.icon)
 
                     addedNodes[k].DoClick = function(s)
                         local location = s:GetText()
-                        net.Start("gcap_getPicture")
+                        net.Start("getPicture")
                         net.WriteString(location)
                         net.SendToServer()
                     end
@@ -149,7 +149,7 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
 
                             addedNodes[_][k].DoClick = function(s)
                                 local location = s:GetText()
-                                net.Start("gcap_getPicture")
+                                net.Start("getPicture")
                                 net.WriteString(_ .. "/" .. location)
                                 net.SendToServer()
                             end
@@ -157,7 +157,7 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
                         end
                     end
 
-                    datesNode:SetExpanded( true )
+                    datesNode:SetExpanded( true )            
                 elseif (CAP.method == "player") then
                     local playerNode = tree:AddNode("Players")
 
@@ -173,7 +173,7 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
 
                             addedNodes[_][k].DoClick = function(s)
                                 local location = s:GetText()
-                                net.Start("gcap_getPicture")
+                                net.Start("getPicture")
                                 net.WriteString(_ .. "/" .. location)
                                 net.SendToServer()
                             end
@@ -181,14 +181,14 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
                         end
                     end
 
-                    playerNode:SetExpanded( true )
+                    playerNode:SetExpanded( true )                               
                 else
                     addedNodes[k] = mainNode:AddNode(v.title:gsub(";", ":"))
                     addedNodes[k].Icon:SetImage(v.icon)
 
                     addedNodes[k].DoClick = function(s)
                         local location = s:GetText()
-                        net.Start("gcap_getPicture")
+                        net.Start("getPicture")
                         net.WriteString(location)
                         net.SendToServer()
                     end
@@ -199,7 +199,7 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
         local htmlpnl = frm:Add( "HTML" )
         htmlpnl:Dock( FILL )
 
-        net.Receive("gcap_addPicture", function(len, server)
+        net.Receive("addPicture", function(len, server)
             ply = LocalPlayer()
             if not ply.ScreenViewChunks then
                 ply.ScreenViewChunks = {}
@@ -218,7 +218,7 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
     end
 end)
 
-net.Receive("gcap_gcapNotify", function(l,s)
+net.Receive("gcapNotify", function(l,s)
     local msg = {}
 
     table.insert(msg, color_white)
