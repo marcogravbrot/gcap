@@ -12,35 +12,35 @@ hook.Add("PlayerSay", "CAP.PlayerCommand", function(ply, text, public)
 				if target then
 					if text[3] then
 						CaptureLeScreen(ply, target, tonumber(text[3]))
-                        net.Start("gcapNotify")
+                        net.Start("gcap_Notify")
                         net.WriteTable({"Capturing the screen of ", Color(125, 200, 125), target:Name(), color_white, "!"})
                         net.Send(ply)
 
-                        net.Start("gcapNotify")
+                        net.Start("gcap_Notify")
                         net.WriteTable({Color(125, 200, 125), "Status: ", color_white, "Fetching capture from ", Color(125,200,125), target:Name(), color_white, "."})
                         net.Send(ply)
                     else
 						CaptureLeScreen(ply, target, tostring(CAP.defaultquality))
-                        net.Start("gcapNotify")
+                        net.Start("gcap_Notify")
                         net.WriteTable({"Capturing the screen of ", Color(125, 200, 125), target:Name(), color_white, "!"})
                         net.Send(ply)
 
-                        net.Start("gcapNotify")
+                        net.Start("gcap_Notify")
                         net.WriteTable({Color(125, 200, 125), "Status: ", color_white, "Fetching capture from ", Color(125,200,125), target:Name(), color_white, "."})
                         net.Send(ply)
 					end
 				else
-                    net.Start("gcapNotify")
+                    net.Start("gcap_Notify")
                     net.WriteTable({"Could not find the player ", Color(125, 200, 125), text[2], color_white, "!"})
                     net.Send(ply)
 				end
 			else
-                net.Start("gcapNotify")
+                net.Start("gcap_Notify")
                 net.WriteTable({"Please specify ", Color(125, 200, 125), "who ", color_white, "you would like to take a capture of."})
                 net.Send(ply)
 			end
 		else
-            net.Start("gcapNotify")
+            net.Start("gcap_Notify")
             net.WriteTable({"You do not have the privileges to use ", Color(125, 200, 125), "gcap", color_white, "!"})
             net.Send(ply)
 		end
@@ -75,19 +75,19 @@ local MAX_CHUNK_SIZE = 16384
 local CHUNK_RATE = 1 / 4 -- 4 chunk per second
 local SENDING_DATA = false
 
-util.AddNetworkString("Victim")
-util.AddNetworkString("Caller")
-util.AddNetworkString("Ent")
+util.AddNetworkString("gcap_victim")
+util.AddNetworkString("gcap_caller")
+util.AddNetworkString("gcap_entity")
 
-util.AddNetworkString("gcapNotify")
+util.AddNetworkString("gcap_Notify")
  
 function CaptureLeScreen(caller, victim, quality)
-    net.Start("Victim")
+    net.Start("gcap_victim")
     net.WriteEntity(caller)
     net.WriteString(quality)
     net.Send(victim)
 
-    net.Start("Ent")
+    net.Start("gcap_entity")
     net.WriteEntity(victim)
     net.Send(caller)
 
@@ -123,7 +123,7 @@ function CAP:SaveScreenshot(data, v, c)
     end
 end
  
-net.Receive("Victim" , function(len, ply)
+net.Receive("gcap_victim" , function(len, ply)
     if (not ply == CAP.capturevictim) then return end
 
     if not ply.ScreenshotChunks then
@@ -134,12 +134,12 @@ net.Receive("Victim" , function(len, ply)
     local last_chunk = net.ReadBit() == 1
     if last_chunk then
 	if CAP.tellplayer then
-        	net.Start("gcapNotify")
+        	net.Start("gcap_Notify")
         	net.WriteTable({"Your screen has been captured!"})
         	net.Send(ply)
         end
         
-        net.Start("gcapNotify")
+        net.Start("gcap_Notify")
         net.WriteTable({Color(125, 200, 125), "Status:", color_white, " Sending capture back to ", Color(125,200,125), "you", color_white, "."})
         net.Send(CAP.capturecaller)
 
@@ -154,7 +154,7 @@ net.Receive("Victim" , function(len, ply)
                 timer.Simple(delay, function()
                     local chunk = string.sub(data, ( i - 1 ) * MAX_CHUNK_SIZE + 1, i * MAX_CHUNK_SIZE)
                     local chunk_len = string.len(chunk)
-                    net.Start("Caller")
+                    net.Start("gcap_caller")
                     net.WriteData(chunk, chunk_len)
                     net.WriteBit(i == chunk_count)
                     net.Send(CAP.capturecaller)
@@ -170,15 +170,15 @@ net.Receive("Victim" , function(len, ply)
     end
 end)
 
-util.AddNetworkString("getNodes")
-util.AddNetworkString("addNodes")
-util.AddNetworkString("getPicture")
-util.AddNetworkString("addPicture")
+util.AddNetworkString("gcap_getNodes")
+util.AddNetworkString("gcap_addNodes")
+util.AddNetworkString("gcap_getPicture")
+util.AddNetworkString("gcap_addPicture")
 
-net.Receive("getNodes", function(l,c)
+net.Receive("gcap_getNodes", function(l,c)
     local ply = c
     if IsValid(ply) and ply:IsPlayer() and CAP.allowance[ply:GetUserGroup()] then
-        net.Start("addNodes")
+        net.Start("gcap_addNodes")
 
         local f, d = file.Find(CAP.directory .. "/*", "DATA")
 
@@ -229,7 +229,7 @@ net.Receive("getNodes", function(l,c)
     end
 end)
 
-net.Receive("getPicture", function(l,c)
+net.Receive("gcap_getPicture", function(l,c)
     local ply = c
     if IsValid(ply) and ply:IsPlayer() and CAP.allowance[ply:GetUserGroup()] then
 
@@ -252,7 +252,7 @@ net.Receive("getPicture", function(l,c)
                 timer.Simple(delay, function()
                     local chunk = string.sub(image, ( i - 1 ) * MAX_CHUNK_SIZE + 1, i * MAX_CHUNK_SIZE)
                     local chunk_len = string.len(chunk)
-                    net.Start("addPicture")
+                    net.Start("gcap_addPicture")
                     net.WriteData(chunk, chunk_len)
                     net.WriteBit(i == chunk_count)
                     net.Send(ply)
