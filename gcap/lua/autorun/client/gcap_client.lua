@@ -94,7 +94,7 @@ function CAP.Notify( tbl )
     end
 
     chat.AddText( unpack( msg ) )
-end)
+end
 
 concommand.Add("cap_viewer", function(ply, cmd, args)
     if IsValid(ply) and (CAP.allowance[ply:GetUserGroup()]) then
