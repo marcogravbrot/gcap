@@ -113,7 +113,7 @@ concommand.Add("cap_viewer", function(ply, cmd, args)
         tree:SetWide(frm:GetWide()/3.25)
 
         if (CAP.method == "none" and (not "date" or "steamid" or "player")) then
-            local mainNode = tree:AddNode("Captures")
+            mainNode = tree:AddNode("Captures")
         end
         
         net.Start("gcap_getNodes")
